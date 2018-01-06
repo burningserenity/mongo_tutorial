@@ -56,9 +56,52 @@ use db // creates database with name db if it doesn't already exist
 
 CReate:
 
-  db.collection.insertOne() // Inserts a single document into a collection
+  db.collection.insertOne() // Inserts a single document into a collection;
+  // creates the collection if it doesn't exist
+
+    You may insert a document into a collection with any parameters
+    whatsoever. Unlike in SQL, NoSQL platforms such as MongoDB don't require
+    that you follow any pre-established schema or format. There will be no
+    empty columns, or columns with default values, unless explicitly specified.
+
+    So if we were to enter:
+
+      db.orwell.insertOne({
+          "title": "Homage to Catalonia",
+          "year": 1938,
+          "year published in US": 1952,
+          "read": false
+      })
+
+    Followed by:
+
+      db.orwell.insertOne({
+          "title": "1984",
+          "year": 1949,
+          "read": true
+      })
+
+    The latter document would not have an empty "year published in US"
+    property like it would if we were using a predefined schema with an SQL
+    platform.
+
+  The only exception to this rule is with the _id field. By default, this
+  field will be a unique hexadecimal string. You may specify _id manually, but
+  the insertion will throw an error if the string you enter is not unique.
 
   db.collection.insertMany() // Inserts several documents into a collection
+
+    This looks like an array of JSON objects, like this:
+
+    db.orwell.insertMany([{
+      "title": "Burmese Days",
+      "year": 1934
+    }, {
+      "title": "The Road to Wigan Pier",
+      "year": 1937
+    }])
+
+    The rules for inserting a single document apply the same way here.
 
 Update:
 
