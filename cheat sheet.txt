@@ -1,16 +1,42 @@
-db == database; use the name of the database you query
+db == database
 
-collection == collection of documents; can also use name of collection you're
-querying
+collection == collection of documents; use name of collection you're
+querying. Any time a collection is referenced that doesn't exist, it will be
+created.
 
 generic == db.collection.method()
 
 If your database is books and your collection is george_orwell, you would do:
   
-  books.orwell.method
+  use books
+  db.orwell.method
+
+To read a document, simply do:
+
+  db.collection.find()
 
 Here are some CRUD methods:
 
 use db // creates database with name db if it doesn't already exist
 
-db.collection.insertOne() // Inserts a single document into a collection
+CReate:
+
+  db.collection.insertOne() // Inserts a single document into a collection
+
+  db.collection.insertMany() // Inserts several documents into a collection
+
+Update:
+
+  db.collection.updateOne() // update a single document
+
+  db.collection.updateMany() // update several documents
+
+  db.collection.replaceOne() // removes and replaces a single document;
+  without parameters, this is the first document returned
+
+Delete:
+
+  db.collection.deleteOne() // deletes a single document; without parameters,
+  this is the first document returned
+
+  db.collection.deleteMany() // deletes several documents
