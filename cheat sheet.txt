@@ -1,0 +1,16 @@
+db == database; use the name of the database you query
+
+collection == collection of documents; can also use name of collection you're
+querying
+
+generic == db.collection.method()
+
+If your database is books and your collection is george_orwell, you would do:
+  
+  books.orwell.method
+
+Here are some CRUD methods:
+
+use db // creates database with name db if it doesn't already exist
+
+db.collection.insertOne() // Inserts a single document into a collection
