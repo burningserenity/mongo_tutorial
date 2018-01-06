@@ -1,10 +1,18 @@
 db == database
 
+to view databases that already exist on your local machine:
+
+  show dbs
+
 collection == collection of documents; use name of collection you're
 querying. Any time a collection is referenced that doesn't exist, it will be
 created.
 
 generic == db.collection.method()
+
+To view all collections in your current database:
+
+  show collections
 
 If your database is books and your collection is george_orwell, you would do:
   
@@ -13,7 +21,34 @@ If your database is books and your collection is george_orwell, you would do:
 
 To read a document, simply do:
 
-  db.collection.find()
+  db.collection.find() // Returns all documents in a collection,
+  // unless parameters are specified. Will return all documents matching the
+  // parameters specified.
+  
+  Parameters look like JSON, for instance, if we want to return all books in
+  the orwell collection, we would do:
+
+    db.orwell.find()
+
+  If we wanted to find only Animal Farm, it would look like:
+
+    db.orwell.find({"title": "Animal Farm"})
+
+  You may do this with any combination of parameters in JSON-style format. For
+  instance, if there were two books named Animal Farm written by George Orwell
+  (there aren't, just for the sake of illustration), we could narrow it down
+  to one written in 1945:
+
+    db.orwell.find({
+        "title": "Animal Farm",
+        "year": 1945
+    })
+
+  Notice that numbers are represented without quotes, just like in JSON. This
+  of course applies to booleans as well. So, if we wanted to find all books
+  written by Orwell that we already read, we could do:
+
+    db.orwell.find({"read": true})
 
 Here are some CRUD methods:
 
