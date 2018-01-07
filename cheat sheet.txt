@@ -50,6 +50,24 @@ To read a document, simply do:
 
     db.orwell.find({"read": true})
 
+  We could also pass a second argument to the find method, called a
+  projection. A projection is quite simply the fields we're interested in
+  returning.
+
+  Again with Animal Farm, if we only want to return the year, it would look
+  like this:
+
+    db.orwell.find({
+        "title": "Animal Farm"
+    }, {
+      "year": 1
+    })
+
+  Note that that any number other than 0, the boolean true, and any string
+  tells Mongo to return that field. 0, null, and false tell Mongo to exclude a
+  field and return the others. The _id field must be explicitly excluded this
+  way, otherwise it will always be returned.
+
 Here are some CRUD methods:
 
 use db // creates database with name db if it doesn't already exist
@@ -106,6 +124,83 @@ CReate:
 Update:
 
   db.collection.updateOne() // update a single document
+
+    This method can take up to three arguments, but requires only one. They
+    are filter, update, and options. The update argument is the only one
+    that's required. Without a filter argument, the first document returned is
+    updated.
+
+    Recall that in a previous example, we marked Homage to Catalonia as not
+    read. If we read that book and want our database to reflect that, this is
+    what the command looks like:
+
+      db.orwell.updateOne({
+        "title": "Homage to Catalonia"
+      }, {
+        $set: {
+          "read": true
+        }
+      })
+
+    Notice the property that begins with $. This is the update operator, which
+    tells Mongo which type of update to perform. The update operators are:
+
+      $currentDate // Sets the value of a field to the current date. Useful
+      // for manually updating Date or Timestamp fields.
+
+      $inc // Increments the value of a numeric field be the amount you
+      // specify.
+
+      $min // Only updates a numeric field if the value you specify is less than the
+      // existing value of that field.
+
+      $max // Only updates a numeric field if the value you specify is greater than
+      // the existing value of that field.
+      
+      $mul // Multiplies a numeric field by the amount you specify
+
+      $rename // Renames a field; does not change its value.
+
+      $set // Sets the value of a field in a document. Probably the most
+      // commonly used update operator.
+
+      $setOnInsert // Sets the value of a field if a new document is inserted.
+
+      $unset // Removes a field from a document.
+
+    There are also update operators for use on arrays. They are:
+
+      $ // Updates the first element matching a query condition.
+
+      $[] // Updates all elements that match the query condition.
+
+      $[<identifier>] // Updates all elements that match the arrayFilers
+      // condition in the documents matching the query condition.
+
+      $addToSet // Adds elements to an array if they do not exist in that set.
+
+      $pop // Removes the first or last item of an array.
+
+      $pull // Removes all array elements matching the specified query.
+
+      $pullAll // Removes all matching values from an array
+
+      $push // Add an item to an array regardless of whether it exists.
+
+      These array operators can be modified with the following:
+
+        $each // Makes $push or $addToSet append multiple items
+
+        $position // Specifies an array index to add elements when using $push
+
+        $slice // Limits size of updated arrays when using $push
+
+        $sort // $push reorders documents stored in an array
+
+    Finally, there is the bitwise operator for performing AND, OR, XOR updates
+    of integer values. To be clear, in any kind of programming or mathematics,
+    AND means both values are true, OR means one or the other value is true,
+    and XOR means one value is true and the other is false.
 
   db.collection.updateMany() // update several documents
 
