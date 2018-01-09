@@ -127,8 +127,8 @@ Update:
 
     This method can take up to three arguments, but requires only one. They
     are filter, update, and options. The update argument is the only one
-    that's required. Without a filter argument, the first document returned is
-    updated.
+    that's required. There must be a filter argument, but using an empty
+    object {} updates the first document returned.
 
     Recall that in a previous example, we marked Homage to Catalonia as not
     read. If we read that book and want our database to reflect that, this is
@@ -201,6 +201,104 @@ Update:
     of integer values. To be clear, in any kind of programming or mathematics,
     AND means both values are true, OR means one or the other value is true,
     and XOR means one value is true and the other is false.
+
+  With all that said, there are still the optional parameters left to discuss.
+  The first is upsert. By default, updateOne will not update a document that
+  doesn't exist. However, if we set {upsert: true} after the update operation,
+  a new document is created.
+
+  Say we want to update Down and Out in Paris and London to reflect that we
+  read it. If you've been following along, this book won't be in our
+  collection, so just calling:
+
+    db.orwell.updateOne({
+        "title": "Down and Out in Paris and London"
+    }, {
+      $set: {
+        "read": true
+      }
+    })
+    
+  Won't do anything, because this book isn't in our collection. While we could
+  just as easily add it with insertOne(), we could also:
+
+    db.orwell.updateOne({
+        "title": "Down and Out in Paris and London"
+    }, {
+      $set: {
+        "read": true
+      }
+    }, {
+      upsert: true
+    })
+
+  To accomplish the same thing. Of course, setting upsert to true does not
+  prevent us from performing an update on an existing document, in which case
+  it updates like normal.
+
+  Another optional argument, is Write Concern. Write concern is important for
+  administration of a MongoDB server set up, and is beyond the scope of this
+  tutorial.
+
+  We also have the option to include a Collation argument. This deals with how
+  the actual language is handled, and if used, we must at least specify a
+  locale. Any further explanation is beyond the scope of this tutorial.
+    
+  
+  Finally, new to version 3.6, is the ability to modify array elements based
+  on criteria we define ourselves. Let's say we want to write a paper based on
+  our extensive George Orwell reading. Let's also say that we want to keep
+  track of how many paragraphs per page we discuss a subject from Homage to
+  Catalonia. We could first update like this:
+
+    db.orwell.updateOne({
+        "title": "Homage to Catalonia"
+    }, {
+        $set: {
+          "paragraphs": [0, 2, 3, 1, 0]
+        }
+    })
+
+    According to this update, we wrote 0 paragraphs about Homage to Catalonia
+    on page 1, 2 on page 2, 3 on page 3, 1 on page 4, and 0 on page 5.
+    Next, lets say that we decided that 3 paragraphs on page 3 wasn't enough,
+    that we ended up writing 2 more paragraphs. We could update it like so,
+    using an array filter:
+
+      db.orwell.updateOne({
+          "title": "Homage to Catalonia"
+      }, {
+        $set: {
+          "paragraphs.$[element]": 5
+        }
+      }, {
+        arrayFilters : [{
+          "element": {
+            $eq: 3
+          }
+        }]
+      })
+
+    There's kind of a lot going on here, so let's look at it in more detail:
+
+      db.orwell.updateOne({
+          "title": "Homage to Catalonia"    // Filter, no different from before
+      }, {
+        $set: {
+          "paragraphs.$[element]": 5    // $[element] is a placeholder. It
+                                        // behaves similarly to a variable,
+                                        // and we can name it whatever we want.
+        }
+      }, {
+        arrayFilters : [{
+          "element": { // This is where we define our placeholder.
+            $eq: 3     // This particular operator looks for an index with a
+                       // value of 3. It is not the only $ operator we could use, but it
+                       // works here. If there was more than one index with a
+                       // value of 3, only the first with that value would be modified.
+          }
+        }]
+      })
 
   db.collection.updateMany() // update several documents
 
