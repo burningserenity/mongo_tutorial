@@ -410,3 +410,7 @@ Delete:
 This was just a cursory examination of MongoDB's CRUD operations. There is of
 course a great deal more, but this tutorial should be enough to get you
 started with it.
+
+Once you're used to these basics, the documentation can explain other, more
+specific functions you may or may not need. As of January, 10th, 2018, that
+documentation can be found here: https://docs.mongodb.com/manual/reference/method/js-collection/
