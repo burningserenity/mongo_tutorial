@@ -302,8 +302,66 @@ Update:
 
   db.collection.updateMany() // update several documents
 
+    This of course works similarly to updateOne(), but with some key
+    differences. Instead of having to specify each element to update in an
+    array, we can update each element that matches the filter. Recall of
+    course that updateOne() only updates the first element matching that
+    filter.
+
+    Let's say we want to include more books in our paper. First, we can
+    include some paragraphs about 1984 and Down and Out in Paris and London.
+    First we update those two books with a paragraph list, one at a time:
+
+      db.orwell.updateOne({
+          "title": "1984"
+      }, {
+        $set: {
+          paragraphs: [1, 3, 6, 3, 0]
+        }
+      })
+
+      db.orwell.updateOne({
+          "title": "Down and Out in Paris and London"
+      }, {
+        $set: {
+          paragraphs: [0, 5, 2, 2, 1]
+        }
+      })
+
+    Next, let's say we decide that the paper is too long; we want to cut
+    paragraphs across the board. We will take any books with 5 or more
+    paragraphs on a single page and cut them down to 4 paragraphs. This is how
+    we do that:
+
+      db.orwell.updateMany({
+        paragraphs: {
+          $gte: 5   // $gte operates on everything greater than or equal to
+                    // number specified, which is 5 in this case
+        }
+      }, {
+        $set: {
+          "paragraphs.$[element]": 4
+        }
+      }, {
+        arrayFilters: [{
+          "element": {
+            $gte: 5
+          }
+        }]
+      })
+
+    Notice that this looks a lot like the previous command to update a single
+    document. The difference is that instead of just updating the first array
+    element returned, it updates all array elements that match the filter. If
+    we wanted to do an updateMany on non-array integers, we would leave out
+    the arrayFilters argument.
+
   db.collection.replaceOne() // removes and replaces a single document;
-  without parameters, this is the first document returned
+                             // without parameters, this is the first document returned
+    This works exactly the same way as updateOne(), except for the fact that
+    the document returned from the filter parameter is deleted, and only those
+    fields defined for the new document exist. This is useful if you want to
+    update a document but also remove unnecessary fields at the same time.
 
 Delete:
 
