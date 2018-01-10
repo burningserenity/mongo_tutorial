@@ -368,4 +368,45 @@ Delete:
   db.collection.deleteOne() // deletes a single document; without parameters,
   this is the first document returned
 
+    This method is very simple. The only argument it requires is a filter. So
+    let's say we want to delete Animal Farm altogether. We do:
+
+      db.orwell.deleteOne({
+        "title": "Animal Farm"
+      })
+
+    That's it. Of course, we can specify a write concern and collation if we
+    want, but that's still beyond the scope of this tutorial. Also, if there
+    were two books titled Animal Farm, because this is the deleteOne() method,
+    only the first one returned is actually deleted. If we wanted to delete
+    every possible Animal Farm document, we'd do deleteMany().
+
   db.collection.deleteMany() // deletes several documents
+
+    This looks exactly like the previous method. Let's say we decided to
+    catalogue multiple print editions of Animal Farm, so maybe we have a few
+    documents like this:
+
+      [{
+        "title": "Animal Farm",
+        "edition": "first"
+      }, {
+        "title": "Animal Farm",
+        "edition": "US reissue"
+      }, {
+        "title": "Animal Farm",
+        "edition": "Japanese translation"
+      }]
+
+    If we just did deleteOne(), only the first edition document would be
+    removed. deleteMany() gets rid of all of them.
+
+
+  Finally, if we want to drop the entire orwell collection, not just specific
+  documents, we'd do:
+
+    db.orwell.drop()
+
+This was just a cursory examination of MongoDB's CRUD operations. There is of
+course a great deal more, but this tutorial should be enough to get you
+started with it.
