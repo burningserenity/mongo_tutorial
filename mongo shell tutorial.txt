@@ -14,7 +14,7 @@ To view all collections in your current database:
 
   show collections
 
-If your database is books and your collection is george_orwell, you would do:
+If your database is books and your collection is orwell, you would do:
   
   use books
   db.orwell.method
@@ -245,7 +245,7 @@ Update:
   locale. Any further explanation is beyond the scope of this tutorial.
     
   
-  Finally, new to version 3.6, is the ability to modify array elements based
+  Finally, new to version 3.6, is the ability to modify array elements ba_sed
   on criteria we define ourselves. Let's say we want to write a paper based on
   our extensive George Orwell reading. Let's also say that we want to keep
   track of how many paragraphs per page we discuss a subject from Homage to
