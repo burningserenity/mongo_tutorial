@@ -19,7 +19,9 @@ If your database is books and your collection is orwell, you would do:
   use books
   db.orwell.method
 
-To read a document, simply do:
+Here are some CRUD operations:
+
+To Read a document, simply do:
 
   db.collection.find() // Returns all documents in a collection,
   // unless parameters are specified. Will return all documents matching the
@@ -68,11 +70,10 @@ To read a document, simply do:
   field and return the others. The _id field must be explicitly excluded this
   way, otherwise it will always be returned.
 
-Here are some CRUD methods:
 
-use db // creates database with name db if it doesn't already exist
+Create:
 
-CReate:
+  use db // creates database with name db if it doesn't already exist
 
   db.collection.insertOne() // Inserts a single document into a collection;
   // creates the collection if it doesn't exist
